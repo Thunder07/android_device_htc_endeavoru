@@ -1,21 +1,9 @@
-# Android fstab file.
-#<src>                                             <mnt_point>         <type>    <mnt_flags>                                             <fs_mgr_flags>
-# The filesystem that contains the filesystem checker binary (typically /system) cannot
-# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
-# data partition must be located at the bottom for supporting device encryption
-
-/dev/block/platform/sdhci-tegra.3/by-name/APP      /system              ext4      ro,barrier=0                                            wait
-/dev/block/platform/sdhci-tegra.3/by-name/CAC      /cache               ext4      noatime,nosuid,nodev,noauto_da_alloc,barrier=0          wait
-/dev/block/platform/sdhci-tegra.3/by-name/RCA      /rca                 ext4      noatime,ro,barrier=0                                    wait
-/dev/block/platform/sdhci-tegra.3/by-name/RFS      /rfs                 ext4      noatime,rw,barrier=0                                    wait
-/dev/block/platform/sdhci-tegra.3/by-name/DLG      /devlog              ext4      nosuid,nodev,barrier=0                                  defaults
-/dev/block/platform/sdhci-tegra.3/by-name/UDA      /data                ext4      noatime,nosuid,nodev,noauto_da_alloc,barrier=0          wait,encryptable=/dev/block/platform/sdhci-tegra.3/by-name/DUM
-
-# vold-managed volumes ("block device" is actually a sysfs devpath)
-/devices/platform/sdhci-tegra.3/mmc_host/mmc0      auto vfat defaults      voldmanaged=sdcard0:14,nonremovable,noemulatedsd
-/devices/platform/tegra-ehci                       auto vfat defaults      voldmanaged=usbdisk:auto
-
-# recovery
-/dev/block/platform/sdhci-tegra.3/by-name/LNX      /boot                emmc      defaults                                                recoveryonly
-/dev/block/platform/sdhci-tegra.3/by-name/SOS      /recovery            emmc      defaults                                                recoveryonly
-/dev/block/platform/sdhci-tegra.3/by-name/MSC      /misc                emmc      defaults                                                recoveryonly
+#TWRP
+# mount point  fstype   device                 [flags]
+/recovery      emmc    /dev/block/mmcblk0p5
+/boot          emmc    /dev/block/mmcblk0p4    flags=backup=1
+/system        ext4    /dev/block/mmcblk0p12   flags=backup=1;display="System"
+/cache         ext4    /dev/block/mmcblk0p13   flags=backup=0;display="Cache";ignoreblkid
+/data          ext4    /dev/block/mmcblk0p14   flags=backup=1;storagename="Internal SD Card";ignoreblkid;length=-16384
+/xtradata      ext4    /dev/block/mmcblk0p15   flags=backup=1;display="2GB Extra Data";backup=0;storage;wipeingui;ignoreblkid
+/misc          emmc    /dev/block/mmcblk0p17

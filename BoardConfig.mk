@@ -22,6 +22,7 @@
 
 # inherit from tegra3-common
 -include device/htc/tegra3-common/BoardConfigCommon.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/htc/endeavoru/recovery/recovery.mk
 
 # Boot/Recovery image settings
 BOARD_KERNEL_CMDLINE :=
@@ -53,59 +54,62 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 2302672896
 BOARD_FLASH_BLOCK_SIZE := 4096
 
 # Wifi related defines
-USES_TI_MAC80211 := true
+#USES_TI_MAC80211 := true
 # Required for newer wpa_supplicant_8_ti versions to fix tethering
-BOARD_WIFI_SKIP_CAPABILITIES := true
+#BOARD_WIFI_SKIP_CAPABILITIES := true
 
-ifdef USES_TI_MAC80211
-BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
-WPA_SUPPLICANT_VERSION           := VER_0_8_X_TI
-BOARD_HOSTAPD_DRIVER             := NL80211
-BOARD_WLAN_DEVICE                := wl12xx_mac80211
-BOARD_SOFTAP_DEVICE              := wl12xx_mac80211
-WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wl12xx_sdio.ko"
-WIFI_DRIVER_MODULE_NAME          := "wl12xx_sdio"
-WIFI_FIRMWARE_LOADER             := ""
-COMMON_GLOBAL_CFLAGS             += -DUSES_TI_MAC80211
-endif
+#ifdef USES_TI_MAC80211
+#BOARD_WPA_SUPPLICANT_DRIVER      := NL80211
+#WPA_SUPPLICANT_VERSION           := VER_0_8_X_TI
+#BOARD_HOSTAPD_DRIVER             := NL80211
+#BOARD_WLAN_DEVICE                := wl12xx_mac80211
+#BOARD_SOFTAP_DEVICE              := wl12xx_mac80211
+#WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wl12xx_sdio.ko"
+#WIFI_DRIVER_MODULE_NAME          := "wl12xx_sdio"
+#WIFI_FIRMWARE_LOADER             := ""
+#COMMON_GLOBAL_CFLAGS             += -DUSES_TI_MAC80211
+#endif
 
 # Kernel
-TARGET_KERNEL_SOURCE := kernel/htc/endeavoru
-TARGET_KERNEL_CONFIG := cyanogenmod_endeavoru_defconfig
+#TARGET_KERNEL_SOURCE := kernel/htc/endeavoru
+#TARGET_KERNEL_CONFIG := cyanogenmod_endeavoru_defconfig
 
 # Building wifi modules
-TARGET_MODULES_SOURCE := "kernel/htc/endeavoru/drivers/net/wireless/compat-wireless_R5.SP2.03"
-TARGET_MODULES_SOURCE_DIR := "compat-wireless_R5.SP2.03"
+#TARGET_MODULES_SOURCE := "kernel/htc/endeavoru/drivers/net/wireless/compat-wireless_R5.SP2.03"
+#TARGET_MODULES_SOURCE_DIR := "compat-wireless_R5.SP2.03"
 
-WIFI_MODULES:
-	rm -rf $(KERNEL_OUT)/COMPAT
-	mkdir $(KERNEL_OUT)/COMPAT
-	cp -rf $(TARGET_MODULES_SOURCE) $(KERNEL_OUT)/COMPAT
-	$(MAKE) -C $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR) O=$(KERNEL_OUT)/COMPAT KERNEL_DIR=$(KERNEL_OUT) KLIB=$(KERNEL_OUT) KLIB_BUILD=$(KERNEL_OUT) ARCH=$(TARGET_ARCH) $(ARM_CROSS_COMPILE)
+#WIFI_MODULES:
+#	rm -rf $(KERNEL_OUT)/COMPAT
+#	mkdir $(KERNEL_OUT)/COMPAT
+#	cp -rf $(TARGET_MODULES_SOURCE) $(KERNEL_OUT)/COMPAT
+#	$(MAKE) -C $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR) O=$(KERNEL_OUT)/COMPAT KERNEL_DIR=$(KERNEL_OUT) KLIB=$(KERNEL_OUT) KLIB_BUILD=$(KERNEL_OUT) ARCH=$(TARGET_ARCH) $(ARM_CROSS_COMPILE)
+#
+#	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/compat/compat.ko $(KERNEL_MODULES_OUT)
+#	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/net/mac80211/mac80211.ko $(KERNEL_MODULES_OUT)
+#	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/net/wireless/cfg80211.ko $(KERNEL_MODULES_OUT)
+#	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/drivers/net/wireless/wl12xx/wl12xx.ko $(KERNEL_MODULES_OUT)
+#	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/drivers/net/wireless/wl12xx/wl12xx_sdio.ko $(KERNEL_MODULES_OUT)
+#
+#	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/compat.ko
+#	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/mac80211.ko
+#	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/cfg80211.ko
+#	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/wl12xx.ko
+#	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/wl12xx_sdio.ko
 
-	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/compat/compat.ko $(KERNEL_MODULES_OUT)
-	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/net/mac80211/mac80211.ko $(KERNEL_MODULES_OUT)
-	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/net/wireless/cfg80211.ko $(KERNEL_MODULES_OUT)
-	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/drivers/net/wireless/wl12xx/wl12xx.ko $(KERNEL_MODULES_OUT)
-	mv $(KERNEL_OUT)/COMPAT/$(TARGET_MODULES_SOURCE_DIR)/drivers/net/wireless/wl12xx/wl12xx_sdio.ko $(KERNEL_MODULES_OUT)
-
-	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/compat.ko
-	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/mac80211.ko
-	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/cfg80211.ko
-	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/wl12xx.ko
-	$(ARM_EABI_TOOLCHAIN)/arm-eabi-strip --strip-unneeded $(KERNEL_MODULES_OUT)/wl12xx_sdio.ko
-
-TARGET_KERNEL_MODULES := WIFI_MODULES
+#TARGET_KERNEL_MODULES := WIFI_MODULES
 
 # Avoid the generation of ldrcc instructions
-NEED_WORKAROUND_CORTEX_A9_745320 := true
+#NEED_WORKAROUND_CORTEX_A9_745320 := true
 
 # Sensors invensense
-BOARD_USES_GENERIC_INVENSENSE := false
+#BOARD_USES_GENERIC_INVENSENSE := false
 
 # Bluetooth
-BOARD_HAVE_BLUETOOTH_TI := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/endeavoru/bluetooth
+#BOARD_HAVE_BLUETOOTH_TI := true
+#BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/htc/endeavoru/bluetooth
+
+TARGET_PREBUILT_KERNEL := /home/alawi/android/ZeusKL/arch/arm/boot/zImage
+TARGET_PREBUILT_RECOVERY_KERNEL := /home/alawi/android/ZeusKL/arch/arm/boot/zImage
 
 # Recovery
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
@@ -114,9 +118,11 @@ BOARD_RECOVERY_SWIPE := true
 TARGET_RECOVERY_FSTAB := device/htc/endeavoru/ramdisk/fstab.endeavoru
 RECOVERY_FSTAB_VERSION := 2
 BOARD_HAS_LARGE_FILESYSTEM := true
-
+BOARD_LZMA_RECOVERY_RD := true
 # UMS
-TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/class/android_usb/f_mass_storage/lun0/file"
+# TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/class/android_usb/f_mass_storage/lun0/file"
+# TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/virtual/android_usb/android0/f_mass_storage/lun0/file"
+#TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/tegra-udc.0/gadget/lun0/file"
 
 # Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/htc/endeavoru
@@ -126,3 +132,44 @@ BOARD_SEPOLICY_DIRS += \
     device/htc/endeavoru/selinux
 
 #BOARD_SEPOLICY_UNION +=
+
+#MultiROM Config
+MR_DPI := hdpi
+MR_KEXEC_MEM_MIN := 0x81000000
+MR_INIT_DEVICES := device/htc/endeavoru/mr_init_devices.c
+MR_FSTAB := device/htc/endeavoru/fstab.endeavoru.twrp
+MR_DPI_MUL := 1
+MR_INPUT_TYPE := type_b
+MR_DEVICE_HOOKS := device/htc/endeavoru/mr_hooks.c
+MR_DEVICE_HOOKS_VER := 3
+MR_DPI_FONT := 200
+
+
+
+#TWRP config:
+RECOVERY_SDCARD_ON_DATA := true
+TW_NO_USB_STORAGE := true
+#TW_INCLUDE_JB_CRYPTO := true
+#TW_EXTERNAL_STORAGE_PATH := "/sdcard"
+#TW_EXTERNAL_STORAGE_MOUNT_POINT := "sdcard"
+TW_BRIGHTNESS_PATH := /sys/devices/platform/tegra-pwm-bl/backlight/tegra-pwm-bl/brightness
+TW_MAX_BRIGHTNESS := 255
+TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+HAVE_SELINUX := true
+TW_EXCLUDE_SUPERSU := true
+#TWHAVE_SELINUX := true
+
+# TWRP Configurations
+DEVICE_RESOLUTION := 720x1280
+BOARD_HAS_NO_REAL_SDCARD := true
+TARGET_RECOVERY_INITRC := device/htc/endeavoru/recovery/init.twrp.rc
+TW_FLASH_FROM_STORAGE := true
+#TW_INCLUDE_CRYPTO := false
+#TW_CRYPTO_FS_TYPE := "ext4"
+#TW_CRYPTO_REAL_BLKDEV := "/dev/block/mmcblk0p15"
+#TW_CRYPTO_MNT_POINT := "/data"
+#TW_CRYPTO_FS_OPTIONS := "barrier=0"
+#TW_CRYPTO_FS_FLAGS := "0x00000406"
+#TW_CRYPTO_KEY_LOC := "footer"
+MR_USE_MROM_FSTAB := true
+

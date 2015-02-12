@@ -20,7 +20,7 @@ DEVICE_PACKAGE_OVERLAYS += device/htc/endeavoru/overlay
 
 # Set default USB interface
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mass_storage,adb
+    persist.sys.usb.config=mtp,adb
 
 # Don't store dalvik on /cache, it gets annoying when /cache is wiped
 # by us to enable booting into recovery after flashing boot.img
@@ -46,6 +46,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # force gpu rendering(2d drawing) [Nvidia setting - libhtc-opt2.so]
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.ui.hw=true
+
+# tell installer we are handling the new storage layout
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+	ro.build.endeavoru.newlayout=1
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
